@@ -2,9 +2,8 @@
 <html>
 <head>
   <script>
-    setTimeout(function () {
-      window.location.href = "io.supabase.flutter://reset-callback/";
-    }, 2000);
+      const hash = window.location.hash;
+      window.location.href = "io.supabase.flutter://reset-callback/"+ hash;
   </script>
   <title>Password Reset</title>
 </head>
