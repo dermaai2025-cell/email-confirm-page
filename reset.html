@@ -2,14 +2,12 @@
 <html>
 <head>
   <script>
-      console.log("Page loaded");
+       const hash = window.location.hash;
+    const query = window.location.search;
 
-    setTimeout(() => {
-      const hash = window.location.hash;
-      console.log("HASH:", hash);
+    const tokens = hash || query;
 
-      window.location.href = "io.supabase.flutter://reset-callback/" + hash;
-    }, 2000);
+    window.location.href = "io.supabase.flutter://reset-callback/" + tokens;
   </script>
   <title>Password Reset</title>
 </head>
