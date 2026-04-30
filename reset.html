@@ -2,12 +2,8 @@
 <html>
 <head>
   <script>
-       const hash = window.location.hash;
-    const query = window.location.search;
-
-    const tokens = hash || query;
-
-    window.location.href = "io.supabase.flutter://reset-callback/" + tokens;
+    const hash = window.location.hash;
+    window.location.href = "io.supabase.flutter://reset-callback/" + hash;
   </script>
   <title>Password Reset</title>
 </head>
