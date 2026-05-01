@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
   <script>
@@ -10,5 +10,61 @@
 <body style="text-align:center; margin-top:50 px; font-family:sans-serif;">
   <h2>Reset your password 🔑</h2>
   <p>You can now return to the app and Reset Your Password</p>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Reset Password</title>
+</head>
+
+<body style="text-align:center; margin-top:50px; font-family:sans-serif;">
+  <h2>Reset your password 🔑</h2>
+
+  <input type="password" id="password" placeholder="Enter new password" />
+  <br><br>
+
+  <button onclick="resetPassword()">Update Password</button>
+
+  <p id="msg"></p>
+
+  <script>
+    async function resetPassword() {
+      const password = document.getElementById("password").value;
+
+      if (password.length < 6) {
+        document.getElementById("msg").innerText = "Password too short";
+        return;
+      }
+
+      const hash = window.location.hash;
+
+      const params = new URLSearchParams(hash.substring(1));
+      const access_token = params.get("access_token");
+
+      if (!access_token) {
+        document.getElementById("msg").innerText = "Invalid link";
+        return;
+      }
+
+      const res = await fetch("https://fqswccltpvgyfqqlmbyt.supabase.co/auth/v1/user", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + access_token
+        },
+        body: JSON.stringify({
+          password: password
+        })
+      });
+
+      if (res.ok) {
+        document.getElementById("msg").innerText = "Password updated successfully ✅";
+      } else {
+        document.getElementById("msg").innerText = "Error updating password";
+      }
+    }
+  </script>
 </body>
 </html>
