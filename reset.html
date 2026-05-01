@@ -30,41 +30,60 @@
   <p id="msg"></p>
 
   <script>
-    async function resetPassword() {
-      const password = document.getElementById("password").value;
+    <script>
+  async function resetPassword() {
+    const password = document.getElementById("password").value;
 
-      if (password.length < 6) {
-        document.getElementById("msg").innerText = "Password too short";
-        return;
-      }
-
-      const hash = window.location.hash;
-
-      const params = new URLSearchParams(hash.substring(1));
-      const access_token = params.get("access_token");
-
-      if (!access_token) {
-        document.getElementById("msg").innerText = "Invalid link";
-        return;
-      }
-
-      const res = await fetch("https://fqswccltpvgyfqqlmbyt.supabase.co/auth/v1/user", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + access_token
-        },
-        body: JSON.stringify({
-          password: password
-        })
-      });
-
-      if (res.ok) {
-        document.getElementById("msg").innerText = "Password updated successfully ✅";
-      } else {
-        document.getElementById("msg").innerText = "Error updating password";
-      }
+    if (password.length < 6) {
+      document.getElementById("msg").innerText = "Password too short";
+      return;
     }
+
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+
+    if (!code) {
+      document.getElementById("msg").innerText = "Invalid link";
+      return;
+    }
+
+    // تحويل الكود إلى session
+    const res = await fetch("https://fqswccltpvgyfqqlmbyt.supabase.co/auth/v1/token?grant_type=pkce", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        auth_code: code
+      })
+    });
+
+    const data = await res.json();
+
+    if (!data.access_token) {
+      document.getElementById("msg").innerText = "Invalid or expired link";
+      return;
+    }
+
+    // تحديث الباسورد
+    const update = await fetch("https://fqswccltpvgyfqqlmbyt.supabase.co/auth/v1/user", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + data.access_token
+      },
+      body: JSON.stringify({
+        password: password
+      })
+    });
+
+    if (update.ok) {
+      document.getElementById("msg").innerText = "Password updated successfully ✅";
+    } else {
+      document.getElementById("msg").innerText = "Error updating password";
+    }
+  }
+</script>
   </script>
 </body>
 </html>
