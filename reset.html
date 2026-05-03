@@ -17,39 +17,18 @@
 <html>
 <head>
   <title>Reset Password</title>
-</head>
+  <script>
+    // أول ما الصفحة تفتح
+    window.onload = function () {
+      const params = window.location.search;
 
+      // 🔥 redirect للـ app
+      window.location.href = "io.supabase.flutter://reset-callback" + params;
+    };
+  </script>
+</head>
 <body style="text-align:center; margin-top:50px; font-family:sans-serif;">
   <h2>Reset your password 🔑</h2>
   <p>Please open the app to complete resetting your password.</p>
-
-  <script>
-    // const hash = window.location.hash;
-
-    // // يحاول يفتح التطبيق
-    // window.location.href = "myapp://reset-password" + hash;
-
-   // // لو التطبيق مفتحش، يفضل الرسالة
- <script>
-async function resetPassword() {
-  const password = document.getElementById("password").value;
-
-  if (password.length < 6) {
-    document.getElementById("msg").innerText = "Password too short";
-    return;
-  }
-
-  const params = new URLSearchParams(window.location.search);
-  const code = params.get("code");
-
-  if (!code) {
-    document.getElementById("msg").innerText = "Invalid link";
-    return;
-  }
-
-  // باقي الكود...
-}
-</script>
-  </script>
 </body>
 </html>
