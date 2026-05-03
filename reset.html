@@ -21,69 +21,15 @@
 
 <body style="text-align:center; margin-top:50px; font-family:sans-serif;">
   <h2>Reset your password 🔑</h2>
-
-  <input type="password" id="password" placeholder="Enter new password" />
-  <br><br>
-
-  <button onclick="resetPassword()">Update Password</button>
-
-  <p id="msg"></p>
+  <p>Please open the app to complete resetting your password.</p>
 
   <script>
-    <script>
-  async function resetPassword() {
-    const password = document.getElementById("password").value;
+    const hash = window.location.hash;
 
-    if (password.length < 6) {
-      document.getElementById("msg").innerText = "Password too short";
-      return;
-    }
+    // يحاول يفتح التطبيق
+    window.location.href = "myapp://reset-password" + hash;
 
-    const params = new URLSearchParams(window.location.search);
-    const code = params.get("code");
-
-    if (!code) {
-      document.getElementById("msg").innerText = "Invalid link";
-      return;
-    }
-
-    // تحويل الكود إلى session
-    const res = await fetch("https://fqswccltpvgyfqqlmbyt.supabase.co/auth/v1/token?grant_type=pkce", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        auth_code: code
-      })
-    });
-
-    const data = await res.json();
-
-    if (!data.access_token) {
-      document.getElementById("msg").innerText = "Invalid or expired link";
-      return;
-    }
-
-    // تحديث الباسورد
-    const update = await fetch("https://fqswccltpvgyfqqlmbyt.supabase.co/auth/v1/user", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + data.access_token
-      },
-      body: JSON.stringify({
-        password: password
-      })
-    });
-
-    if (update.ok) {
-      document.getElementById("msg").innerText = "Password updated successfully ✅";
-    } else {
-      document.getElementById("msg").innerText = "Error updating password";
-    }
-  }
-</script>
+    // لو التطبيق مفتحش، يفضل الرسالة
   </script>
 </body>
 </html>
